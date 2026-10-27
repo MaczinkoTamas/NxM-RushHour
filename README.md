@@ -1,2 +1,2 @@
 # NxM-RushHour
-Programozási technológiák második beadandó 
+Második beadandó 2026. 12. 08. (Még nincs elkezdve)
