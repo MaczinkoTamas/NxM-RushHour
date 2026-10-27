@@ -1,2 +1,2 @@
 # NxM-RushHour
-Második beadandó 2026. 12. 08. (Még nincs elkezdve)
+2. beadandó 2026. 12. 08. (Még nincs elkezdve)
