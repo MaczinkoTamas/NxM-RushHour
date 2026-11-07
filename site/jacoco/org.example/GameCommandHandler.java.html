@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameCommandHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">NxM-RushHour</a> &gt; <a href="index.source.html" class="el_package">org.example</a> &gt; <span class="el_source">GameCommandHandler.java</span></div><h1>GameCommandHandler.java</h1><pre class="source lang-java linenums">package org.example;
+
+import org.example.model.GameSaveStore;
+import org.example.model.mainmenu.settings.GameSettings;
+import org.example.model.map.Direction;
+import org.example.model.map.GameSession;
+import org.example.model.map.MoveResult;
+import org.example.model.map.Vehicle;
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.List;
+import java.util.Objects;
+
+final class GameCommandHandler {
+    private final PrintStream output;
+    private final GameSaveStore saveStore;
+    private final GameSettings settings;
+
+<span class="fc" id="L20">    GameCommandHandler(PrintStream output, GameSaveStore saveStore, GameSettings settings) {</span>
+<span class="fc" id="L21">        this.output = Objects.requireNonNull(output, &quot;output&quot;);</span>
+<span class="fc" id="L22">        this.saveStore = Objects.requireNonNull(saveStore, &quot;saveStore&quot;);</span>
+<span class="fc" id="L23">        this.settings = Objects.requireNonNull(settings, &quot;settings&quot;);</span>
+<span class="fc" id="L24">    }</span>
+
+    void handle(GameSession session, String command) throws IOException {
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if (command.isBlank()) {</span>
+<span class="nc" id="L28">            return;</span>
+        }
+<span class="fc" id="L30">        String[] parts = command.split(&quot;\\s+&quot;, 4);</span>
+<span class="pc bpc" id="L31" title="1 of 4 branches missed.">        if (isControlKey(parts[0]) &amp;&amp; parts.length &gt; 1) {</span>
+<span class="fc" id="L32">            moveWithControl(session, parts);</span>
+<span class="fc" id="L33">            return;</span>
+        }
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (isVehicleDirectionCommand(session, parts)) {</span>
+<span class="fc" id="L36">            moveVehicleInDirection(session, parts);</span>
+<span class="fc" id="L37">            return;</span>
+        }
+<span class="pc bpc" id="L39" title="2 of 6 branches missed.">        switch (parts[0].toLowerCase()) {</span>
+<span class="fc" id="L40">            case &quot;b&quot;, &quot;back&quot;, &quot;exit&quot;, &quot;next&quot; -&gt; session.leaveLevel();</span>
+<span class="fc" id="L41">            case &quot;help&quot;, &quot;h&quot;, &quot;?&quot; -&gt; GameHelp.print(settings.controls(), settings.gameMode(), output);</span>
+<span class="fc" id="L42">            case &quot;move&quot; -&gt; moveVehicle(session, parts);</span>
+<span class="nc" id="L43">            case &quot;undo&quot; -&gt; undoMoves(session, parts);</span>
+<span class="fc" id="L44">            case &quot;save&quot; -&gt; saveGame(session, command);</span>
+<span class="nc" id="L45">            default -&gt; output.println(&quot;Ismeretlen parancs.&quot;);</span>
+        }
+<span class="fc" id="L47">    }</span>
+
+    private boolean isControlKey(String key) {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        return settings.controls().directionFor(key) != null;</span>
+    }
+
+    private void moveWithControl(GameSession session, String[] parts) {
+<span class="pc bpc" id="L54" title="2 of 4 branches missed.">        if (parts.length &lt; 2 || parts.length &gt; 3) {</span>
+<span class="nc" id="L55">            output.println(&quot;Használat: &lt;iránybillentyű&gt; &lt;színbetű/azonosító&gt; [lépések]&quot;);</span>
+<span class="nc" id="L56">            return;</span>
+        }
+        try {
+<span class="fc" id="L59">            Direction direction = settings.controls().directionFor(parts[0]);</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">            int distance = parts.length == 3 ? Integer.parseInt(parts[2]) : 1;</span>
+<span class="fc" id="L61">            String vehicleId = resolveVehicleId(session, parts[1]);</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">            if (vehicleId != null) {</span>
+<span class="fc" id="L63">                printMoveResult(session.move(vehicleId, direction, distance));</span>
+            }
+<span class="nc" id="L65">        } catch (NumberFormatException exception) {</span>
+<span class="nc" id="L66">            output.println(&quot;A lépésszám egész szám legyen.&quot;);</span>
+<span class="fc" id="L67">        }</span>
+<span class="fc" id="L68">    }</span>
+
+    private boolean isVehicleDirectionCommand(GameSession session, String[] parts) {
+<span class="fc bfc" id="L71" title="All 4 branches covered.">        return (parts.length == 2 || parts.length == 3)</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                &amp;&amp; findVehicle(session, parts[0]) != null</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">                &amp;&amp; parseMoveDirection(parts[1]) != null;</span>
+    }
+
+    private void moveVehicleInDirection(GameSession session, String[] parts) {
+        try {
+<span class="fc" id="L78">            String vehicleId = resolveVehicleId(session, parts[0]);</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">            int distance = parts.length == 3 ? Integer.parseInt(parts[2]) : 1;</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">            if (vehicleId != null) {</span>
+<span class="fc" id="L81">                Direction direction = parseMoveDirection(parts[1]);</span>
+<span class="fc" id="L82">                printMoveResult(session.move(vehicleId, direction, distance));</span>
+            }
+<span class="nc" id="L84">        } catch (NumberFormatException exception) {</span>
+<span class="nc" id="L85">            output.println(&quot;A lépésszám egész szám legyen.&quot;);</span>
+<span class="fc" id="L86">        }</span>
+<span class="fc" id="L87">    }</span>
+
+    private Direction parseMoveDirection(String input) {
+<span class="fc" id="L90">        Direction direction = Direction.fromNotation(input);</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        return direction != null ? direction : settings.controls().directionFor(input);</span>
+    }
+
+    private Vehicle findVehicle(GameSession session, String inputId) {
+<span class="fc" id="L95">        return session.vehicles().stream()</span>
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">                .filter(vehicle -&gt; vehicle.id().equalsIgnoreCase(inputId)</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">                        || vehicle.marker().equalsIgnoreCase(inputId))</span>
+<span class="fc" id="L98">                .findFirst()</span>
+<span class="fc" id="L99">                .orElse(null);</span>
+    }
+
+    private void moveVehicle(GameSession session, String[] parts) {
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        if (parts.length == 3) {</span>
+<span class="nc" id="L104">            String vehicleId = resolveVehicleId(session, parts[1]);</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">            if (vehicleId != null) {</span>
+<span class="nc" id="L106">                Direction direction = parseMoveDirection(parts[2]);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                MoveResult result = direction == null</span>
+<span class="nc" id="L108">                        ? session.moveToCoordinate(vehicleId, parts[2])</span>
+<span class="nc" id="L109">                        : session.move(vehicleId, direction, 1);</span>
+<span class="nc" id="L110">                printMoveResult(result);</span>
+            }
+<span class="nc" id="L112">            return;</span>
+        }
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (parts.length == 4) {</span>
+<span class="fc" id="L115">            moveVehicleByDistance(session, parts);</span>
+<span class="fc" id="L116">            return;</span>
+        }
+<span class="nc" id="L118">        output.println(&quot;Használat: move &lt;színbetű/azonosító&gt; &lt;irány&gt; &lt;lépés&gt; &quot;</span>
+                + &quot;vagy move &lt;színbetű/azonosító&gt; &lt;koordináta&gt;&quot;);
+<span class="nc" id="L120">    }</span>
+
+    private void moveVehicleByDistance(GameSession session, String[] parts) {
+<span class="fc" id="L123">        Direction direction = parseMoveDirection(parts[2]);</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if (direction == null) {</span>
+<span class="nc" id="L125">            output.println(&quot;Érvénytelen irány; használható: U, D, L, R vagy a súgó szerinti billentyűk.&quot;);</span>
+<span class="nc" id="L126">            return;</span>
+        }
+        try {
+<span class="fc" id="L129">            int distance = Integer.parseInt(parts[3]);</span>
+<span class="fc" id="L130">            String vehicleId = resolveVehicleId(session, parts[1]);</span>
+<span class="pc bpc" id="L131" title="1 of 2 branches missed.">            if (vehicleId != null) {</span>
+<span class="fc" id="L132">                printMoveResult(session.move(vehicleId, direction, distance));</span>
+            }
+<span class="nc" id="L134">        } catch (NumberFormatException exception) {</span>
+<span class="nc" id="L135">            output.println(&quot;A lépésszám egész szám legyen.&quot;);</span>
+<span class="fc" id="L136">        }</span>
+<span class="fc" id="L137">    }</span>
+
+    private String resolveVehicleId(GameSession session, String inputId) {
+<span class="fc" id="L140">        List&lt;Vehicle&gt; matches = session.vehicles().stream()</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">                .filter(vehicle -&gt; vehicle.id().equalsIgnoreCase(inputId)</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">                        || vehicle.marker().equalsIgnoreCase(inputId))</span>
+<span class="fc" id="L143">                .toList();</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (matches.size() &gt; 1) {</span>
+<span class="nc" id="L145">            output.println(&quot;A színbetű nem egyedi; add meg a teljes autóazonosítót.&quot;);</span>
+<span class="nc" id="L146">            return null;</span>
+        }
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        return matches.isEmpty() ? inputId : matches.getFirst().id();</span>
+    }
+
+    private void printMoveResult(MoveResult result) {
+<span class="fc" id="L152">        output.println(result.message());</span>
+<span class="fc" id="L153">    }</span>
+
+    private void undoMoves(GameSession session, String[] parts) {
+        try {
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            int count = parts.length == 1 ? 1 : Integer.parseInt(parts[1]);</span>
+<span class="nc" id="L158">            session.undo(count);</span>
+<span class="nc" id="L159">            output.println(count + &quot; lépés visszavonva.&quot;);</span>
+<span class="nc" id="L160">        } catch (IllegalArgumentException | IllegalStateException exception) {</span>
+<span class="nc" id="L161">            output.println(exception.getMessage());</span>
+<span class="nc" id="L162">        }</span>
+<span class="nc" id="L163">    }</span>
+
+    private void saveGame(GameSession session, String command) throws IOException {
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">        String name = command.length() &gt; &quot;save&quot;.length()</span>
+<span class="pc" id="L167">                ? command.substring(&quot;save&quot;.length()).trim() : &quot;&quot;;</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        if (name.isBlank()) {</span>
+<span class="nc" id="L169">            output.println(&quot;Használat: save &lt;név&gt;&quot;);</span>
+<span class="nc" id="L170">            return;</span>
+        }
+<span class="fc" id="L172">        saveStore.saveSession(session, name);</span>
+<span class="fc" id="L173">        output.println(&quot;Játékállás elmentve: &quot; + name);</span>
+<span class="fc" id="L174">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

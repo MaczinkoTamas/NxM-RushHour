@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoardRenderer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">NxM-RushHour</a> &gt; <a href="index.source.html" class="el_package">org.example</a> &gt; <span class="el_source">BoardRenderer.java</span></div><h1>BoardRenderer.java</h1><pre class="source lang-java linenums">package org.example;
+
+import org.example.model.map.GameSession;
+import org.example.model.map.Level;
+import org.example.model.map.Obstacles;
+import org.example.model.map.Orientation;
+import org.example.model.map.Vehicle;
+
+import java.io.PrintStream;
+
+final class BoardRenderer {
+    private BoardRenderer() {
+    }
+
+    static void print(GameSession session, PrintStream output) {
+<span class="fc" id="L16">        Level level = session.level();</span>
+<span class="fc" id="L17">        output.println();</span>
+<span class="fc" id="L18">        output.println(level.name() + &quot; — &quot; + level.difficulty().displayName()</span>
+<span class="fc" id="L19">                + &quot; — lépések: &quot; + session.steps());</span>
+<span class="fc" id="L20">        String border = &quot;+---&quot;.repeat(level.boardSize()) + &quot;+&quot;;</span>
+<span class="fc" id="L21">        output.println(&quot;       U (fel)&quot;);</span>
+<span class="fc" id="L22">        output.println(border);</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        for (int row = 0; row &lt; level.boardSize(); row++) {</span>
+<span class="fc" id="L24">            output.print(&quot;L  |&quot;);</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">            for (int column = 0; column &lt; level.boardSize(); column++) {</span>
+<span class="fc" id="L26">                output.printf(&quot; %s &quot;, cellAt(session, row, column));</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">                boolean exitOpening = column == level.boardSize() - 1</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">                        &amp;&amp; row == level.exitCoordinate().rowIndex(level.boardSize());</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">                if (!exitOpening) {</span>
+<span class="fc" id="L30">                    output.print(&quot;|&quot;);</span>
+                }
+            }
+<span class="fc" id="L33">            output.print(&quot;  R&quot;);</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">            if (row == level.exitCoordinate().rowIndex(level.boardSize())) {</span>
+<span class="fc" id="L35">                output.print(&quot;  -&gt; kijárat&quot;);</span>
+            }
+<span class="fc" id="L37">            output.println();</span>
+<span class="fc" id="L38">            output.println(border);</span>
+        }
+<span class="fc" id="L40">        output.println(&quot;       D (le)&quot;);</span>
+<span class="fc" id="L41">        output.println(&quot;Jelmagyarázat: színbetű = autó, # = akadály, -&gt; = kijárat&quot;);</span>
+<span class="fc" id="L42">    }</span>
+
+    private static String cellAt(GameSession session, int row, int column) {
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (Vehicle vehicle : session.vehicles()) {</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">            for (int part = 0; part &lt; vehicle.length(); part++) {</span>
+<span class="fc" id="L47">                int vehicleRow = vehicle.row()</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">                        + (vehicle.orientation() == Orientation.VERTICAL ? part : 0);</span>
+<span class="fc" id="L49">                int vehicleColumn = vehicle.column()</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">                        + (vehicle.orientation() == Orientation.HORIZONTAL ? part : 0);</span>
+<span class="fc bfc" id="L51" title="All 4 branches covered.">                if (vehicleRow == row &amp;&amp; vehicleColumn == column) {</span>
+<span class="fc" id="L52">                    return vehicle.marker();</span>
+                }
+            }
+<span class="fc" id="L55">        }</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (session.level().obstacles().cells().contains(new Obstacles.Cell(row, column))) {</span>
+<span class="fc" id="L57">            return &quot;#&quot;;</span>
+        }
+<span class="fc" id="L59">        return &quot; &quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

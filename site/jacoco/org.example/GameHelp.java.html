@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameHelp.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">NxM-RushHour</a> &gt; <a href="index.source.html" class="el_package">org.example</a> &gt; <span class="el_source">GameHelp.java</span></div><h1>GameHelp.java</h1><pre class="source lang-java linenums">package org.example;
+
+import org.example.model.mainmenu.settings.Controls;
+import org.example.model.mainmenu.settings.GameMode;
+import org.example.model.map.Direction;
+
+import java.io.PrintStream;
+
+final class GameHelp {
+    private GameHelp() {
+    }
+
+    static void print(Controls controls, GameMode gameMode, PrintStream output) {
+<span class="fc" id="L14">        output.println(&quot;Térképirányok: U=fel, D=le, L=balra, R=jobbra.&quot;);</span>
+<span class="fc" id="L15">        output.println(&quot;Használat: move &lt;autó&gt; &lt;U|D|L|R&gt; &lt;lépések&gt;; például: move R U 2&quot;);</span>
+<span class="fc" id="L16">        output.println(&quot;Billentyűk (&quot; + controls.displayName() + &quot;):&quot;);</span>
+<span class="fc" id="L17">        output.printf(&quot;  %c &lt;autó&gt; [lépések] — fel%n&quot;, controls.keyFor(Direction.UP));</span>
+<span class="fc" id="L18">        output.printf(&quot;  %c &lt;autó&gt; [lépések] — le%n&quot;, controls.keyFor(Direction.DOWN));</span>
+<span class="fc" id="L19">        output.printf(&quot;  %c &lt;autó&gt; [lépések] — balra%n&quot;, controls.keyFor(Direction.LEFT));</span>
+<span class="fc" id="L20">        output.printf(&quot;  %c &lt;autó&gt; [lépések] — jobbra%n&quot;, controls.keyFor(Direction.RIGHT));</span>
+<span class="fc" id="L21">        output.println(&quot;Egyéb parancsok: move &lt;autó&gt; &lt;koordináta&gt;, undo [lépések], &quot;</span>
+                + &quot;save &lt;név&gt;, next (pályaválasztó), b (vissza).&quot;);
+<span class="fc" id="L23">        output.println(&quot;A jármű színbetűjét add meg; ha az nem egyedi, használd a teljes azonosítót.&quot;);</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">        if (gameMode == GameMode.TWO_PLAYER) {</span>
+<span class="fc" id="L25">            output.println(&quot;Kétszemélyes módban sikeres lépésenként felváltva következnek a játékosok.&quot;);</span>
+        }
+<span class="fc" id="L27">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
