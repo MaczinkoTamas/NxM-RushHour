@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Difficulty.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">NxM-RushHour</a> &gt; <a href="index.source.html" class="el_package">org.example.model.mainmenu.settings</a> &gt; <span class="el_source">Difficulty.java</span></div><h1>Difficulty.java</h1><pre class="source lang-java linenums">package org.example.model.mainmenu.settings;
+
+<span class="fc" id="L3">public enum Difficulty {</span>
+<span class="fc" id="L4">    EASY(6, 6, &quot;Könnyű&quot;),</span>
+<span class="fc" id="L5">    MEDIUM(6, 10, &quot;Közepes&quot;),</span>
+<span class="fc" id="L6">    HARD(6, 12, &quot;Nehéz&quot;);</span>
+
+    public static final int LEVELS_PER_DIFFICULTY = 6;
+
+    private final int boardSize;
+    private final int vehicleCount;
+    private final String displayName;
+
+<span class="fc" id="L14">    Difficulty(int boardSize, int vehicleCount, String displayName) {</span>
+<span class="fc" id="L15">        this.boardSize = boardSize;</span>
+<span class="fc" id="L16">        this.vehicleCount = vehicleCount;</span>
+<span class="fc" id="L17">        this.displayName = displayName;</span>
+<span class="fc" id="L18">    }</span>
+
+    public int boardSize() {
+<span class="fc" id="L21">        return boardSize;</span>
+    }
+
+    public int vehicleCount() {
+<span class="fc" id="L25">        return vehicleCount;</span>
+    }
+
+    public String displayName() {
+<span class="fc" id="L29">        return displayName;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

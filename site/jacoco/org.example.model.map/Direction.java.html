@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Direction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">NxM-RushHour</a> &gt; <a href="index.source.html" class="el_package">org.example.model.map</a> &gt; <span class="el_source">Direction.java</span></div><h1>Direction.java</h1><pre class="source lang-java linenums">package org.example.model.map;
+
+<span class="fc" id="L3">public enum Direction {</span>
+<span class="fc" id="L4">    UP(-1, 0, Orientation.VERTICAL),</span>
+<span class="fc" id="L5">    DOWN(1, 0, Orientation.VERTICAL),</span>
+<span class="fc" id="L6">    LEFT(0, -1, Orientation.HORIZONTAL),</span>
+<span class="fc" id="L7">    RIGHT(0, 1, Orientation.HORIZONTAL);</span>
+
+    private final int rowDelta;
+    private final int columnDelta;
+    private final Orientation orientation;
+
+<span class="fc" id="L13">    Direction(int rowDelta, int columnDelta, Orientation orientation) {</span>
+<span class="fc" id="L14">        this.rowDelta = rowDelta;</span>
+<span class="fc" id="L15">        this.columnDelta = columnDelta;</span>
+<span class="fc" id="L16">        this.orientation = orientation;</span>
+<span class="fc" id="L17">    }</span>
+
+    public int rowDelta() {
+<span class="fc" id="L20">        return rowDelta;</span>
+    }
+
+    public int columnDelta() {
+<span class="fc" id="L24">        return columnDelta;</span>
+    }
+
+    public Orientation orientation() {
+<span class="fc" id="L28">        return orientation;</span>
+    }
+
+    public static Direction fromNotation(String notation) {
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (notation == null) {</span>
+<span class="nc" id="L33">            return null;</span>
+        }
+<span class="pc bpc" id="L35" title="1 of 5 branches missed.">        return switch (notation.trim().toUpperCase()) {</span>
+<span class="fc" id="L36">            case &quot;U&quot;, &quot;UP&quot;, &quot;FEL&quot; -&gt; UP;</span>
+<span class="fc" id="L37">            case &quot;D&quot;, &quot;DOWN&quot;, &quot;LE&quot; -&gt; DOWN;</span>
+<span class="fc" id="L38">            case &quot;L&quot;, &quot;LEFT&quot;, &quot;BALRA&quot; -&gt; LEFT;</span>
+<span class="fc" id="L39">            case &quot;R&quot;, &quot;RIGHT&quot;, &quot;JOBBRA&quot; -&gt; RIGHT;</span>
+<span class="nc" id="L40">            default -&gt; null;</span>
+        };
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
