@@ -2,4 +2,4 @@
 Második beadandó 2026. 12. 08. 
 
 Release notes: 
-1.0
+v1.0
