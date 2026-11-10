@@ -30,8 +30,8 @@ class ConsoleGameTest {
         assertTrue(output.contains("+---+---+---+---+---+---+"));
         assertTrue(output.contains("-> kijárat"));
         assertTrue(output.contains("U (fel)"));
-        assertTrue(output.contains("L  |"));
-        assertTrue(output.contains("R  -> kijárat"));
+        assertTrue(output.contains("L / R"));
+        assertFalse(output.contains("L  |"));
         assertTrue(output.contains("D (le)"));
         assertTrue(output.contains("# = akadály"));
         assertFalse(output.contains("Játékos 1 következik."));
