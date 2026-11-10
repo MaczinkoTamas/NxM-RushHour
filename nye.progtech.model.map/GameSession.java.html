@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameSession.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">NxM-RushHour</a> &gt; <a href="index.source.html" class="el_package">nye.progtech.model.map</a> &gt; <span class="el_source">GameSession.java</span></div><h1>GameSession.java</h1><pre class="source lang-java linenums">package nye.progtech.model.map;
+
+import nye.progtech.model.GameSave;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.logging.Logger;
+
+public final class GameSession {
+<span class="fc" id="L15">    private static final Logger LOGGER = Logger.getLogger(GameSession.class.getName());</span>
+
+    private final Level level;
+<span class="fc" id="L18">    private final Deque&lt;Move&gt; history = new ArrayDeque&lt;&gt;();</span>
+    private List&lt;Vehicle&gt; vehicles;
+    private int totalSteps;
+<span class="fc" id="L21">    private boolean active = true;</span>
+    private boolean won;
+
+<span class="fc" id="L24">    public GameSession(Level level) {</span>
+<span class="fc" id="L25">        this.level = Objects.requireNonNull(level, &quot;level&quot;);</span>
+<span class="fc" id="L26">        vehicles = level.vehicles();</span>
+<span class="fc" id="L27">    }</span>
+
+    public GameSession(Level level, GameSave save) {
+<span class="fc" id="L30">        this(level);</span>
+<span class="fc" id="L31">        Objects.requireNonNull(save, &quot;save&quot;);</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (save.levelId() != level.id()) {</span>
+<span class="fc" id="L33">            throw new IllegalArgumentException(&quot;The save belongs to a different level.&quot;);</span>
+        }
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (save.vehiclePositions().size() != vehicles.size()) {</span>
+<span class="fc" id="L36">            throw new IllegalArgumentException(&quot;The save does not contain every vehicle.&quot;);</span>
+        }
+<span class="fc" id="L38">        List&lt;Vehicle&gt; restoredVehicles = new ArrayList&lt;&gt;(vehicles);</span>
+<span class="fc" id="L39">        Set&lt;String&gt; restoredIds = new HashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        for (GameSave.VehiclePosition position : save.vehiclePositions()) {</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            if (!restoredIds.add(position.vehicleId())) {</span>
+<span class="fc" id="L42">                throw new IllegalArgumentException(&quot;The save contains a duplicate vehicle position.&quot;);</span>
+            }
+<span class="fc" id="L44">            int index = findVehicleIndex(position.vehicleId());</span>
+<span class="fc" id="L45">            Vehicle original = restoredVehicles.get(index);</span>
+<span class="fc" id="L46">            restoredVehicles.set(index, new Vehicle(original.id(), original.color(),</span>
+<span class="fc" id="L47">                    position.row(), position.column(), original.length(),</span>
+<span class="fc" id="L48">                    original.orientation(), original.target()));</span>
+<span class="fc" id="L49">        }</span>
+<span class="fc" id="L50">        validateRestoredVehicles(restoredVehicles);</span>
+<span class="fc" id="L51">        vehicles = List.copyOf(restoredVehicles);</span>
+<span class="fc" id="L52">        totalSteps = save.steps();</span>
+<span class="fc" id="L53">        Vehicle target = vehicles.stream().filter(Vehicle::target).findFirst().orElseThrow();</span>
+<span class="fc" id="L54">        won = isAtExit(target);</span>
+<span class="fc" id="L55">    }</span>
+
+    public Level level() {
+<span class="fc" id="L58">        return level;</span>
+    }
+
+    public List&lt;Vehicle&gt; vehicles() {
+<span class="fc" id="L62">        return List.copyOf(vehicles);</span>
+    }
+
+    public int steps() {
+<span class="fc" id="L66">        return totalSteps;</span>
+    }
+
+    public boolean isActive() {
+<span class="fc" id="L70">        return active;</span>
+    }
+
+    public boolean isWon() {
+<span class="fc" id="L74">        return won;</span>
+    }
+
+    public boolean canUndo() {
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        return !history.isEmpty();</span>
+    }
+
+    public int undoableSteps() {
+<span class="fc" id="L82">        return history.size();</span>
+    }
+
+    public MoveResult move(String vehicleId, Direction direction, int distance) {
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (!active) {</span>
+<span class="fc" id="L87">            return reject(&quot;A pálya már le van zárva.&quot;);</span>
+        }
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (won) {</span>
+<span class="fc" id="L90">            return reject(&quot;A pálya már teljesítve van.&quot;);</span>
+        }
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (distance &lt; 1) {</span>
+<span class="fc" id="L93">            return reject(&quot;A lépésszámnak legalább 1-nek kell lennie.&quot;);</span>
+        }
+
+        int vehicleIndex;
+        try {
+<span class="fc" id="L98">            vehicleIndex = findVehicleIndex(vehicleId);</span>
+<span class="fc" id="L99">        } catch (IllegalArgumentException exception) {</span>
+<span class="fc" id="L100">            return reject(exception.getMessage());</span>
+<span class="fc" id="L101">        }</span>
+<span class="fc" id="L102">        Vehicle vehicle = vehicles.get(vehicleIndex);</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        if (direction == null) {</span>
+<span class="fc" id="L104">            return reject(&quot;A mozgás iránya nincs megadva.&quot;);</span>
+        }
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        if (vehicle.orientation() != direction.orientation()) {</span>
+<span class="fc" id="L107">            return reject(&quot;Ez az autó csak &quot; + direction.orientation()</span>
+                    + &quot; irányban, a saját tengelye mentén mozgatható.&quot;);
+        }
+
+<span class="fc" id="L111">        int moved = 0;</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        for (int step = 0; step &lt; distance; step++) {</span>
+<span class="fc" id="L113">            vehicleIndex = findVehicleIndex(vehicleId);</span>
+<span class="fc" id="L114">            vehicle = vehicles.get(vehicleIndex);</span>
+<span class="fc" id="L115">            int row = vehicle.row() + direction.rowDelta();</span>
+<span class="fc" id="L116">            int column = vehicle.column() + direction.columnDelta();</span>
+<span class="fc" id="L117">            String problem = movementProblem(vehicleIndex, vehicle, row, column, direction);</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">            if (problem != null) {</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">                if (moved == 0) {</span>
+<span class="fc" id="L120">                    LOGGER.warning(problem);</span>
+<span class="fc" id="L121">                    return new MoveResult(false, 0, problem);</span>
+                }
+<span class="fc" id="L123">                String message = moved + &quot; lépés megtéve; tovább nem mozdítható. &quot; + problem;</span>
+<span class="fc" id="L124">                LOGGER.info(message);</span>
+<span class="fc" id="L125">                return new MoveResult(true, moved, message);</span>
+            }
+<span class="fc" id="L127">            updateVehicle(vehicleIndex, row, column);</span>
+<span class="fc" id="L128">            history.push(new Move(vehicle.id(), vehicle.row(), vehicle.column()));</span>
+<span class="fc" id="L129">            totalSteps++;</span>
+<span class="fc" id="L130">            moved++;</span>
+<span class="fc bfc" id="L131" title="All 4 branches covered.">            if (vehicle.target() &amp;&amp; isAtExit(vehicles.get(vehicleIndex))) {</span>
+<span class="fc" id="L132">                won = true;</span>
+<span class="fc" id="L133">                LOGGER.info(() -&gt; &quot;Pálya teljesítve: &quot; + level.name());</span>
+<span class="fc" id="L134">                return new MoveResult(true, moved, &quot;Siker! Az autó elérte a kijáratot.&quot;);</span>
+            }
+        }
+<span class="fc" id="L137">        int movedSteps = moved;</span>
+<span class="fc" id="L138">        LOGGER.info(() -&gt; &quot;Járműmozgatás: &quot; + vehicleId + &quot;, &quot; + direction</span>
+                + &quot;, lépések: &quot; + movedSteps);
+<span class="fc" id="L140">        return new MoveResult(true, moved, moved + &quot; lépés sikeresen megtéve.&quot;);</span>
+    }
+
+    public MoveResult move(String vehicleId, String direction, int distance) {
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if (direction == null) {</span>
+<span class="fc" id="L145">            return reject(&quot;A mozgás iránya nincs megadva.&quot;);</span>
+        }
+        try {
+<span class="nc" id="L148">            return move(vehicleId, Direction.valueOf(direction.trim().toUpperCase()), distance);</span>
+<span class="fc" id="L149">        } catch (IllegalArgumentException exception) {</span>
+<span class="fc" id="L150">            return reject(&quot;Érvénytelen irány: &quot; + direction</span>
+                    + &quot;. Lehetséges értékek: UP, DOWN, LEFT, RIGHT.&quot;);
+        }
+    }
+
+    public MoveResult moveToCoordinate(String vehicleId, String coordinateNotation) {
+        GridCoordinate coordinate;
+        try {
+<span class="fc" id="L158">            coordinate = GridCoordinate.parse(coordinateNotation);</span>
+<span class="fc" id="L159">        } catch (IllegalArgumentException exception) {</span>
+<span class="fc" id="L160">            return reject(exception.getMessage());</span>
+<span class="fc" id="L161">        }</span>
+        int vehicleIndex;
+        try {
+<span class="fc" id="L164">            vehicleIndex = findVehicleIndex(vehicleId);</span>
+<span class="nc" id="L165">        } catch (IllegalArgumentException exception) {</span>
+<span class="nc" id="L166">            return reject(exception.getMessage());</span>
+<span class="fc" id="L167">        }</span>
+<span class="fc" id="L168">        Vehicle vehicle = vehicles.get(vehicleIndex);</span>
+        int targetRow;
+        int targetColumn;
+        try {
+<span class="fc" id="L172">            targetRow = coordinate.rowIndex(level.boardSize());</span>
+<span class="fc" id="L173">            targetColumn = coordinate.columnIndex(level.boardSize());</span>
+<span class="fc" id="L174">        } catch (IllegalArgumentException exception) {</span>
+<span class="pc bpc" id="L175" title="2 of 4 branches missed.">            if (vehicle.target() &amp;&amp; level.exitSide() == ExitSide.RIGHT</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">                    &amp;&amp; coordinate.equals(level.exitCoordinate())) {</span>
+<span class="nc" id="L177">                int distanceToExit = Math.max(1,</span>
+<span class="nc" id="L178">                        level.boardSize() - vehicle.column() - vehicle.length() + 1);</span>
+<span class="nc" id="L179">                return move(vehicleId, Direction.RIGHT, distanceToExit);</span>
+            }
+<span class="fc" id="L181">            return reject(exception.getMessage());</span>
+<span class="fc" id="L182">        }</span>
+<span class="pc bpc" id="L183" title="1 of 4 branches missed.">        if (targetRow == vehicle.row() &amp;&amp; targetColumn != vehicle.column()</span>
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">                &amp;&amp; vehicle.orientation() == Orientation.HORIZONTAL) {</span>
+<span class="fc" id="L185">            int delta = targetColumn - vehicle.column();</span>
+<span class="pc bpc" id="L186" title="1 of 2 branches missed.">            return move(vehicleId, delta &gt; 0 ? Direction.RIGHT : Direction.LEFT, Math.abs(delta));</span>
+        }
+<span class="pc bpc" id="L188" title="3 of 4 branches missed.">        if (targetColumn == vehicle.column() &amp;&amp; targetRow != vehicle.row()</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">                &amp;&amp; vehicle.orientation() == Orientation.VERTICAL) {</span>
+<span class="nc" id="L190">            int delta = targetRow - vehicle.row();</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">            return move(vehicleId, delta &gt; 0 ? Direction.DOWN : Direction.UP, Math.abs(delta));</span>
+        }
+<span class="fc" id="L193">        return reject(&quot;A megadott koordináta nem mozgatható elérés az autó tengelye mentén.&quot;);</span>
+    }
+
+    public void move(String vehicleId, int row, int column) {
+<span class="fc" id="L197">        int vehicleIndex = findVehicleIndex(vehicleId);</span>
+<span class="fc" id="L198">        Vehicle vehicle = vehicles.get(vehicleIndex);</span>
+<span class="fc" id="L199">        int rowDelta = row - vehicle.row();</span>
+<span class="fc" id="L200">        int columnDelta = column - vehicle.column();</span>
+<span class="pc bpc" id="L201" title="2 of 4 branches missed.">        if (rowDelta != 0 &amp;&amp; columnDelta != 0) {</span>
+<span class="fc" id="L202">            throw new IllegalArgumentException(&quot;Az autó nem mozoghat átlósan.&quot;);</span>
+        }
+<span class="nc bnc" id="L204" title="All 2 branches missed.">        Direction direction = rowDelta &lt; 0 ? Direction.UP</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">                : rowDelta &gt; 0 ? Direction.DOWN</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">                : columnDelta &lt; 0 ? Direction.LEFT : Direction.RIGHT;</span>
+<span class="nc" id="L207">        MoveResult result = move(vehicleId, direction, Math.max(Math.abs(rowDelta),</span>
+<span class="nc" id="L208">                Math.abs(columnDelta)));</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        if (!result.successful()) {</span>
+<span class="nc" id="L210">            throw new IllegalArgumentException(result.message());</span>
+        }
+<span class="nc" id="L212">    }</span>
+
+    public void undo() {
+<span class="fc" id="L215">        undo(1);</span>
+<span class="fc" id="L216">    }</span>
+
+    public void undo(int moveCount) {
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        if (moveCount &lt; 1) {</span>
+<span class="fc" id="L220">            throw new IllegalArgumentException(&quot;A visszavonandó lépések száma legalább 1 legyen.&quot;);</span>
+        }
+<span class="fc bfc" id="L222" title="All 2 branches covered.">        if (moveCount &gt; history.size()) {</span>
+<span class="fc" id="L223">            throw new IllegalStateException(&quot;Ennyi lépés nem vonható vissza; eddig &quot;</span>
+<span class="fc" id="L224">                    + history.size() + &quot; mezőlépés történt.&quot;);</span>
+        }
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        for (int i = 0; i &lt; moveCount; i++) {</span>
+<span class="fc" id="L227">            Move move = history.pop();</span>
+<span class="fc" id="L228">            int vehicleIndex = findVehicleIndex(move.vehicleId());</span>
+<span class="fc" id="L229">            updateVehicle(vehicleIndex, move.previousRow(), move.previousColumn());</span>
+<span class="fc" id="L230">            totalSteps--;</span>
+        }
+<span class="fc" id="L232">        won = false;</span>
+<span class="fc" id="L233">        LOGGER.info(() -&gt; moveCount + &quot; lépés visszavonva.&quot;);</span>
+<span class="fc" id="L234">    }</span>
+
+    public GameSave save(String name) {
+<span class="fc" id="L237">        List&lt;GameSave.VehiclePosition&gt; positions = vehicles.stream()</span>
+<span class="fc" id="L238">                .map(vehicle -&gt; new GameSave.VehiclePosition(</span>
+<span class="fc" id="L239">                        vehicle.id(), vehicle.row(), vehicle.column()))</span>
+<span class="fc" id="L240">                .toList();</span>
+<span class="fc" id="L241">        LOGGER.info(() -&gt; &quot;Játékállás mentésre előkészítve: &quot; + name);</span>
+<span class="fc" id="L242">        return new GameSave(name, level.id(), steps(), positions);</span>
+    }
+
+    public void leaveLevel() {
+<span class="fc" id="L246">        active = false;</span>
+<span class="fc" id="L247">        LOGGER.info(() -&gt; &quot;Pálya elhagyva: &quot; + level.name());</span>
+<span class="fc" id="L248">    }</span>
+
+    private void validateRestoredVehicles(List&lt;Vehicle&gt; restoredVehicles) {
+<span class="fc" id="L251">        List&lt;Obstacles.Cell&gt; occupied = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        for (Vehicle vehicle : restoredVehicles) {</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">            if (vehicle.target()</span>
+<span class="pc bpc" id="L254" title="1 of 2 branches missed.">                    &amp;&amp; vehicle.row() != level.exitCoordinate().rowIndex(level.boardSize())) {</span>
+<span class="nc" id="L255">                throw new IllegalArgumentException(</span>
+                        &quot;The saved target vehicle is not aligned with the exit.&quot;);
+            }
+<span class="fc bfc" id="L258" title="All 2 branches covered.">            for (int part = 0; part &lt; vehicle.length(); part++) {</span>
+<span class="fc" id="L259">                int row = vehicle.row()</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">                        + (vehicle.orientation() == Orientation.VERTICAL ? part : 0);</span>
+<span class="fc" id="L261">                int column = vehicle.column()</span>
+<span class="fc bfc" id="L262" title="All 2 branches covered.">                        + (vehicle.orientation() == Orientation.HORIZONTAL ? part : 0);</span>
+<span class="pc bpc" id="L263" title="1 of 4 branches missed.">                boolean targetAtExit = vehicle.target() &amp;&amp; isAtExit(vehicle);</span>
+<span class="pc bpc" id="L264" title="2 of 4 branches missed.">                if (row &lt; 0 || column &lt; 0</span>
+<span class="pc bpc" id="L265" title="1 of 4 branches missed.">                        || row &gt;= level.boardSize() || column &gt;= level.boardSize()) {</span>
+<span class="pc bpc" id="L266" title="1 of 2 branches missed.">                    boolean exitCell = targetAtExit</span>
+<span class="nc bnc" id="L267" title="All 2 branches missed.">                            &amp;&amp; row == level.exitCoordinate().rowIndex(level.boardSize())</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">                            &amp;&amp; level.exitSide() == ExitSide.RIGHT</span>
+<span class="pc bnc" id="L269" title="All 2 branches missed.">                            &amp;&amp; column == level.boardSize();</span>
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">                    if (!exitCell) {</span>
+<span class="fc" id="L271">                        throw new IllegalArgumentException(&quot;Saved vehicle is outside the board.&quot;);</span>
+                    }
+                    continue;
+                }
+<span class="fc" id="L275">                Obstacles.Cell cell = new Obstacles.Cell(row, column);</span>
+<span class="pc bpc" id="L276" title="1 of 4 branches missed.">                if (level.obstacles().cells().contains(cell) || occupied.contains(cell)) {</span>
+<span class="fc" id="L277">                    throw new IllegalArgumentException(</span>
+                            &quot;Saved vehicles overlap each other or an obstacle.&quot;);
+                }
+<span class="fc" id="L280">                occupied.add(cell);</span>
+            }
+<span class="fc" id="L282">        }</span>
+<span class="fc" id="L283">    }</span>
+
+    private String movementProblem(
+            int vehicleIndex,
+            Vehicle vehicle,
+            int row,
+            int column,
+            Direction direction
+    ) {
+<span class="fc bfc" id="L292" title="All 4 branches covered.">        boolean targetLeavingThroughExit = vehicle.target()</span>
+<span class="pc bpc" id="L293" title="2 of 4 branches missed.">                &amp;&amp; ((direction == Direction.RIGHT &amp;&amp; level.exitSide() == ExitSide.RIGHT)</span>
+<span class="fc bfc" id="L294" title="All 2 branches covered.">                    || (direction == Direction.LEFT &amp;&amp; level.exitSide() == ExitSide.LEFT))</span>
+<span class="pc bpc" id="L295" title="1 of 2 branches missed.">                &amp;&amp; row == level.exitCoordinate().rowIndex(level.boardSize());</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">        for (int part = 0; part &lt; vehicle.length(); part++) {</span>
+<span class="fc" id="L297">            int occupiedRow = row</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">                    + (vehicle.orientation() == Orientation.VERTICAL ? part : 0);</span>
+<span class="fc" id="L299">            int occupiedColumn = column</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">                    + (vehicle.orientation() == Orientation.HORIZONTAL ? part : 0);</span>
+<span class="fc bfc" id="L301" title="All 4 branches covered.">            if (occupiedRow &lt; 0 || occupiedColumn &lt; 0) {</span>
+<span class="fc" id="L302">                return &quot;A mozgás kilépne a pálya szélén.&quot;;</span>
+            }
+<span class="fc bfc" id="L304" title="All 4 branches covered.">            if (occupiedRow &gt;= level.boardSize() || occupiedColumn &gt;= level.boardSize()) {</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">                if (targetLeavingThroughExit</span>
+<span class="pc bpc" id="L306" title="1 of 2 branches missed.">                        &amp;&amp; occupiedRow == level.exitCoordinate().rowIndex(level.boardSize())</span>
+<span class="pc bpc" id="L307" title="1 of 2 branches missed.">                        &amp;&amp; occupiedColumn == level.exitCoordinate().columnIndex()) {</span>
+<span class="fc" id="L308">                    continue;</span>
+                }
+<span class="fc" id="L310">                return &quot;A mozgás kilépne a pálya szélén, nem a kijáraton keresztül.&quot;;</span>
+            }
+<span class="fc bfc" id="L312" title="All 2 branches covered.">            if (level.obstacles().cells().contains(</span>
+                    new Obstacles.Cell(occupiedRow, occupiedColumn))) {
+<span class="fc" id="L314">                return &quot;A mozgás akadályba ütközne a &quot;</span>
+<span class="fc" id="L315">                        + GridCoordinate.fromGrid(occupiedRow, occupiedColumn, level.boardSize())</span>
+                        + &quot; mezőn.&quot;;
+            }
+<span class="fc bfc" id="L318" title="All 2 branches covered.">            for (int otherIndex = 0; otherIndex &lt; vehicles.size(); otherIndex++) {</span>
+<span class="fc bfc" id="L319" title="All 2 branches covered.">                if (otherIndex != vehicleIndex</span>
+<span class="fc bfc" id="L320" title="All 2 branches covered.">                        &amp;&amp; occupies(vehicles.get(otherIndex), occupiedRow, occupiedColumn)) {</span>
+<span class="fc" id="L321">                    return &quot;A mozgás egy másik autóval ütközne a &quot;</span>
+<span class="fc" id="L322">                            + GridCoordinate.fromGrid(occupiedRow, occupiedColumn, level.boardSize())</span>
+                            + &quot; mezőn.&quot;;
+                }
+            }
+        }
+<span class="fc" id="L327">        return null;</span>
+    }
+
+    private boolean isAtExit(Vehicle vehicle) {
+<span class="pc bpc" id="L331" title="1 of 2 branches missed.">        if (vehicle.row() != level.exitCoordinate().rowIndex(level.boardSize())) {</span>
+<span class="nc" id="L332">            return false;</span>
+        }
+<span class="pc bpc" id="L334" title="1 of 3 branches missed.">        return switch (level.exitSide()) {</span>
+<span class="fc bfc" id="L335" title="All 2 branches covered.">            case RIGHT -&gt; vehicle.column() + vehicle.length() - 1 &gt;= level.boardSize();</span>
+<span class="fc bfc" id="L336" title="All 2 branches covered.">            case LEFT -&gt; vehicle.column() == 0;</span>
+<span class="nc" id="L337">            case TOP, BOTTOM -&gt; false;</span>
+        };
+    }
+
+    private boolean occupies(Vehicle vehicle, int row, int column) {
+<span class="fc bfc" id="L342" title="All 2 branches covered.">        for (int offset = 0; offset &lt; vehicle.length(); offset++) {</span>
+<span class="fc" id="L343">            int occupiedRow = vehicle.row()</span>
+<span class="fc bfc" id="L344" title="All 2 branches covered.">                    + (vehicle.orientation() == Orientation.VERTICAL ? offset : 0);</span>
+<span class="fc" id="L345">            int occupiedColumn = vehicle.column()</span>
+<span class="fc bfc" id="L346" title="All 2 branches covered.">                    + (vehicle.orientation() == Orientation.HORIZONTAL ? offset : 0);</span>
+<span class="fc bfc" id="L347" title="All 4 branches covered.">            if (occupiedRow == row &amp;&amp; occupiedColumn == column) {</span>
+<span class="fc" id="L348">                return true;</span>
+            }
+        }
+<span class="fc" id="L351">        return false;</span>
+    }
+
+    private void updateVehicle(int vehicleIndex, int row, int column) {
+<span class="fc" id="L355">        Vehicle current = vehicles.get(vehicleIndex);</span>
+<span class="fc" id="L356">        Vehicle moved = new Vehicle(current.id(), current.color(), row, column,</span>
+<span class="fc" id="L357">                current.length(), current.orientation(), current.target());</span>
+<span class="fc" id="L358">        List&lt;Vehicle&gt; updatedVehicles = new ArrayList&lt;&gt;(vehicles);</span>
+<span class="fc" id="L359">        updatedVehicles.set(vehicleIndex, moved);</span>
+<span class="fc" id="L360">        vehicles = List.copyOf(updatedVehicles);</span>
+<span class="fc" id="L361">    }</span>
+
+    private int findVehicleIndex(String vehicleId) {
+<span class="fc bfc" id="L364" title="All 2 branches covered.">        for (int index = 0; index &lt; vehicles.size(); index++) {</span>
+<span class="fc bfc" id="L365" title="All 2 branches covered.">            if (vehicles.get(index).id().equals(vehicleId)) {</span>
+<span class="fc" id="L366">                return index;</span>
+            }
+        }
+<span class="fc" id="L369">        throw new IllegalArgumentException(&quot;Ismeretlen autóazonosító: &quot; + vehicleId);</span>
+    }
+
+    private MoveResult reject(String message) {
+<span class="fc" id="L373">        LOGGER.log(java.util.logging.Level.WARNING, message);</span>
+<span class="fc" id="L374">        return new MoveResult(false, 0, message);</span>
+    }
+
+<span class="fc" id="L377">    private record Move(String vehicleId, int previousRow, int previousColumn) {</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
