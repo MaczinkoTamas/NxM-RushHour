@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<levels boardSize="6" exitSide="RIGHT">
+    <level id="1" name="Nyitott garázs" difficulty="EASY">
+        <exit coordinate="G5"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="A5" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="C5" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="D5" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="E2" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="F2" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="B3" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles>
+            <obstacle coordinate="D1"/>
+            <obstacle coordinate="B1"/>
+        </obstacles>
+    </level>
+    <level id="2" name="Kettős torlasz" difficulty="EASY">
+        <exit coordinate="G4"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="A4" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="C4" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="D4" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="E2" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="F2" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="A3" length="2" orientation="HORIZONTAL"/>
+        </vehicles>
+        <obstacles>
+            <obstacle coordinate="B1"/>
+            <obstacle coordinate="B2"/>
+        </obstacles>
+    </level>
+    <level id="3" name="Átjáró" difficulty="EASY">
+        <exit coordinate="G3"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="A3" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="C3" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="D3" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="E3" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="F3" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="A2" length="2" orientation="HORIZONTAL"/>
+        </vehicles>
+        <obstacles>
+            <obstacle coordinate="A6"/>
+            <obstacle coordinate="F6"/>
+        </obstacles>
+    </level>
+    <level id="4" name="Sarokzár" difficulty="EASY">
+        <exit coordinate="G5"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="A5" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="C5" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="D5" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="E5" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="F5" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="A2" length="2" orientation="HORIZONTAL"/>
+        </vehicles>
+        <obstacles>
+            <obstacle coordinate="C1"/>
+            <obstacle coordinate="A4"/>
+        </obstacles>
+    </level>
+    <level id="5" name="Kanyargó út" difficulty="EASY">
+        <exit coordinate="G4"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="A4" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="C4" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="D4" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="E4" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="F4" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="B6" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles>
+            <obstacle coordinate="B3"/>
+            <obstacle coordinate="A5"/>
+        </obstacles>
+    </level>
+    <level id="6" name="Utolsó manőver" difficulty="EASY">
+        <exit coordinate="G3"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="A3" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="C3" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="D3" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="E3" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="F3" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="C6" length="2" orientation="HORIZONTAL"/>
+        </vehicles>
+        <obstacles>
+            <obstacle coordinate="A1"/>
+            <obstacle coordinate="B1"/>
+        </obstacles>
+    </level>
+    <level id="7" name="Rakparti torlódás" difficulty="MEDIUM" boardSize="8">
+        <exit coordinate="I3"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="C3" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="E3" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="F3" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="C2" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="D2" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="E1" length="2" orientation="HORIZONTAL"/>
+            <vehicle id="CC" coordinate="A8" length="3" orientation="VERTICAL"/>
+            <vehicle id="WW" coordinate="A3" length="2" orientation="VERTICAL"/>
+            <vehicle id="KK" coordinate="B8" length="2" orientation="VERTICAL"/>
+            <vehicle id="MM" coordinate="B4" length="3" orientation="VERTICAL"/>
+            <vehicle id="TT" coordinate="C8" length="2" orientation="VERTICAL"/>
+            <vehicle id="NN" coordinate="C6" length="2" orientation="VERTICAL"/>
+            <vehicle id="SS" coordinate="D8" length="2" orientation="VERTICAL"/>
+            <vehicle id="DD" coordinate="D6" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles><obstacle coordinate="E5"/><obstacle coordinate="F5"/><obstacle coordinate="G5"/><obstacle coordinate="H5"/><obstacle coordinate="A5"/><obstacle coordinate="A4"/><obstacle coordinate="B6"/><obstacle coordinate="B1"/></obstacles>
+    </level>
+    <level id="8" name="Konténerudvar" difficulty="MEDIUM" boardSize="8">
+        <exit coordinate="I4"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="C4" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="E4" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="F4" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="C2" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="D2" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="E2" length="2" orientation="HORIZONTAL"/>
+            <vehicle id="CC" coordinate="A8" length="3" orientation="VERTICAL"/>
+            <vehicle id="WW" coordinate="A3" length="2" orientation="VERTICAL"/>
+            <vehicle id="KK" coordinate="B8" length="2" orientation="VERTICAL"/>
+            <vehicle id="MM" coordinate="B4" length="3" orientation="VERTICAL"/>
+            <vehicle id="TT" coordinate="C8" length="2" orientation="VERTICAL"/>
+            <vehicle id="NN" coordinate="C6" length="2" orientation="VERTICAL"/>
+            <vehicle id="SS" coordinate="D8" length="2" orientation="VERTICAL"/>
+            <vehicle id="DD" coordinate="D6" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles><obstacle coordinate="E6"/><obstacle coordinate="F6"/><obstacle coordinate="G6"/><obstacle coordinate="H6"/><obstacle coordinate="A5"/><obstacle coordinate="A4"/><obstacle coordinate="B6"/><obstacle coordinate="B1"/></obstacles>
+    </level>
+    <level id="9" name="Függőleges zsilipek" difficulty="MEDIUM" boardSize="8">
+        <exit coordinate="I5"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="C5" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="E5" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="F5" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="G5" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="H5" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="E3" length="2" orientation="HORIZONTAL"/>
+            <vehicle id="CC" coordinate="A8" length="3" orientation="VERTICAL"/>
+            <vehicle id="WW" coordinate="A3" length="2" orientation="VERTICAL"/>
+            <vehicle id="KK" coordinate="B8" length="2" orientation="VERTICAL"/>
+            <vehicle id="MM" coordinate="B4" length="3" orientation="VERTICAL"/>
+            <vehicle id="TT" coordinate="C8" length="2" orientation="VERTICAL"/>
+            <vehicle id="NN" coordinate="C2" length="2" orientation="VERTICAL"/>
+            <vehicle id="SS" coordinate="D8" length="2" orientation="VERTICAL"/>
+            <vehicle id="DD" coordinate="D2" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles><obstacle coordinate="E7"/><obstacle coordinate="F7"/><obstacle coordinate="G7"/><obstacle coordinate="H7"/><obstacle coordinate="A5"/><obstacle coordinate="A4"/><obstacle coordinate="B6"/><obstacle coordinate="B1"/></obstacles>
+    </level>
+    <level id="10" name="Szűk parkolórács" difficulty="MEDIUM" boardSize="8">
+        <exit coordinate="I6"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="C6" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="E6" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="F6" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="G6" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="H6" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="E4" length="2" orientation="HORIZONTAL"/>
+            <vehicle id="CC" coordinate="A8" length="3" orientation="VERTICAL"/>
+            <vehicle id="WW" coordinate="A3" length="2" orientation="VERTICAL"/>
+            <vehicle id="KK" coordinate="B8" length="2" orientation="VERTICAL"/>
+            <vehicle id="MM" coordinate="B4" length="3" orientation="VERTICAL"/>
+            <vehicle id="TT" coordinate="C8" length="2" orientation="VERTICAL"/>
+            <vehicle id="NN" coordinate="C2" length="2" orientation="VERTICAL"/>
+            <vehicle id="SS" coordinate="D8" length="2" orientation="VERTICAL"/>
+            <vehicle id="DD" coordinate="D2" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles><obstacle coordinate="E8"/><obstacle coordinate="F8"/><obstacle coordinate="G8"/><obstacle coordinate="H8"/><obstacle coordinate="A5"/><obstacle coordinate="A4"/><obstacle coordinate="B6"/><obstacle coordinate="B1"/></obstacles>
+    </level>
+    <level id="11" name="Híd alatti csomó" difficulty="MEDIUM" boardSize="8">
+        <exit coordinate="I7"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="C7" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="E7" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="F7" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="G7" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="H7" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="G4" length="2" orientation="HORIZONTAL"/>
+            <vehicle id="CC" coordinate="A8" length="3" orientation="VERTICAL"/>
+            <vehicle id="WW" coordinate="A3" length="2" orientation="VERTICAL"/>
+            <vehicle id="KK" coordinate="B8" length="2" orientation="VERTICAL"/>
+            <vehicle id="MM" coordinate="B4" length="3" orientation="VERTICAL"/>
+            <vehicle id="TT" coordinate="C3" length="2" orientation="VERTICAL"/>
+            <vehicle id="NN" coordinate="C6" length="2" orientation="VERTICAL"/>
+            <vehicle id="SS" coordinate="D3" length="2" orientation="VERTICAL"/>
+            <vehicle id="DD" coordinate="D6" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles><obstacle coordinate="C1"/><obstacle coordinate="D1"/><obstacle coordinate="C4"/><obstacle coordinate="D4"/><obstacle coordinate="A1"/><obstacle coordinate="A5"/><obstacle coordinate="B5"/><obstacle coordinate="B1"/></obstacles>
+    </level>
+    <level id="12" name="Kettős felüljáró" difficulty="MEDIUM" boardSize="8">
+        <exit coordinate="I8"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="C8" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="E8" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="F8" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="G8" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="H8" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="G5" length="2" orientation="HORIZONTAL"/>
+            <vehicle id="CC" coordinate="A8" length="3" orientation="VERTICAL"/>
+            <vehicle id="WW" coordinate="A3" length="2" orientation="VERTICAL"/>
+            <vehicle id="KK" coordinate="B8" length="2" orientation="VERTICAL"/>
+            <vehicle id="MM" coordinate="B4" length="3" orientation="VERTICAL"/>
+            <vehicle id="TT" coordinate="C4" length="2" orientation="VERTICAL"/>
+            <vehicle id="NN" coordinate="C6" length="2" orientation="VERTICAL"/>
+            <vehicle id="SS" coordinate="D4" length="2" orientation="VERTICAL"/>
+            <vehicle id="DD" coordinate="D6" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles><obstacle coordinate="C1"/><obstacle coordinate="D1"/><obstacle coordinate="C2"/><obstacle coordinate="D2"/><obstacle coordinate="A1"/><obstacle coordinate="A5"/><obstacle coordinate="B5"/><obstacle coordinate="B1"/></obstacles>
+    </level>
+    <level id="13" name="Szűk átjáró" difficulty="HARD" boardSize="10" exitSide="RIGHT">
+        <exit coordinate="K7"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="C7" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="E7" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="F7" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="C2" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="D2" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="G5" length="2" orientation="HORIZONTAL"/>
+            <vehicle id="CC" coordinate="A10" length="3" orientation="VERTICAL"/>
+            <vehicle id="WW" coordinate="A6" length="2" orientation="VERTICAL"/>
+            <vehicle id="KK" coordinate="A3" length="2" orientation="VERTICAL"/>
+            <vehicle id="MM" coordinate="B10" length="3" orientation="VERTICAL"/>
+            <vehicle id="TT" coordinate="B6" length="2" orientation="VERTICAL"/>
+            <vehicle id="NN" coordinate="B3" length="2" orientation="VERTICAL"/>
+            <vehicle id="SS" coordinate="I10" length="3" orientation="VERTICAL"/>
+            <vehicle id="DD" coordinate="I6" length="2" orientation="VERTICAL"/>
+            <vehicle id="EE" coordinate="I3" length="2" orientation="VERTICAL"/>
+            <vehicle id="FF" coordinate="J10" length="3" orientation="VERTICAL"/>
+            <vehicle id="HH" coordinate="J6" length="2" orientation="VERTICAL"/>
+            <vehicle id="JJ" coordinate="J3" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles><obstacle coordinate="E9"/><obstacle coordinate="F9"/><obstacle coordinate="G9"/><obstacle coordinate="H9"/><obstacle coordinate="A7"/><obstacle coordinate="A4"/><obstacle coordinate="A1"/><obstacle coordinate="B7"/><obstacle coordinate="B4"/><obstacle coordinate="B1"/></obstacles>
+    </level>
+    <level id="14" name="Kanyargós körút" difficulty="HARD" boardSize="10" exitSide="LEFT">
+        <exit coordinate="A6"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="G6" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="C6" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="D6" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="C2" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="D2" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="E4" length="2" orientation="HORIZONTAL"/>
+            <vehicle id="CC" coordinate="A3" length="3" orientation="VERTICAL"/>
+            <vehicle id="WW" coordinate="A10" length="2" orientation="VERTICAL"/>
+            <vehicle id="KK" coordinate="A8" length="2" orientation="VERTICAL"/>
+            <vehicle id="MM" coordinate="B3" length="3" orientation="VERTICAL"/>
+            <vehicle id="TT" coordinate="B10" length="2" orientation="VERTICAL"/>
+            <vehicle id="NN" coordinate="B8" length="2" orientation="VERTICAL"/>
+            <vehicle id="SS" coordinate="I10" length="3" orientation="VERTICAL"/>
+            <vehicle id="DD" coordinate="I6" length="2" orientation="VERTICAL"/>
+            <vehicle id="EE" coordinate="I3" length="2" orientation="VERTICAL"/>
+            <vehicle id="FF" coordinate="J10" length="3" orientation="VERTICAL"/>
+            <vehicle id="HH" coordinate="J6" length="2" orientation="VERTICAL"/>
+            <vehicle id="JJ" coordinate="J3" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles><obstacle coordinate="C8"/><obstacle coordinate="D8"/><obstacle coordinate="E8"/><obstacle coordinate="F8"/><obstacle coordinate="I7"/><obstacle coordinate="I4"/><obstacle coordinate="I1"/><obstacle coordinate="J7"/><obstacle coordinate="J4"/><obstacle coordinate="J1"/></obstacles>
+    </level>
+    <level id="15" name="Raktárnegyed" difficulty="HARD" boardSize="10" exitSide="RIGHT">
+        <exit coordinate="K5"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="C5" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="E5" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="F5" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="G5" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="H5" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="E3" length="2" orientation="HORIZONTAL"/>
+            <vehicle id="CC" coordinate="A10" length="3" orientation="VERTICAL"/>
+            <vehicle id="WW" coordinate="A6" length="2" orientation="VERTICAL"/>
+            <vehicle id="KK" coordinate="A3" length="2" orientation="VERTICAL"/>
+            <vehicle id="MM" coordinate="B10" length="3" orientation="VERTICAL"/>
+            <vehicle id="TT" coordinate="B6" length="2" orientation="VERTICAL"/>
+            <vehicle id="NN" coordinate="B3" length="2" orientation="VERTICAL"/>
+            <vehicle id="SS" coordinate="I10" length="3" orientation="VERTICAL"/>
+            <vehicle id="DD" coordinate="I4" length="2" orientation="VERTICAL"/>
+            <vehicle id="EE" coordinate="I2" length="2" orientation="VERTICAL"/>
+            <vehicle id="FF" coordinate="J10" length="3" orientation="VERTICAL"/>
+            <vehicle id="HH" coordinate="J4" length="2" orientation="VERTICAL"/>
+            <vehicle id="JJ" coordinate="J2" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles><obstacle coordinate="E7"/><obstacle coordinate="F7"/><obstacle coordinate="G7"/><obstacle coordinate="H7"/><obstacle coordinate="A7"/><obstacle coordinate="A4"/><obstacle coordinate="A1"/><obstacle coordinate="B7"/><obstacle coordinate="B4"/><obstacle coordinate="B1"/></obstacles>
+    </level>
+    <level id="16" name="Kettős zsákutca" difficulty="HARD" boardSize="10" exitSide="LEFT">
+        <exit coordinate="A4"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="G4" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="C4" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="D4" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="E4" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="F4" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="C2" length="2" orientation="HORIZONTAL"/>
+            <vehicle id="CC" coordinate="A10" length="3" orientation="VERTICAL"/>
+            <vehicle id="WW" coordinate="A6" length="2" orientation="VERTICAL"/>
+            <vehicle id="KK" coordinate="A3" length="2" orientation="VERTICAL"/>
+            <vehicle id="MM" coordinate="B10" length="3" orientation="VERTICAL"/>
+            <vehicle id="TT" coordinate="B6" length="2" orientation="VERTICAL"/>
+            <vehicle id="NN" coordinate="B3" length="2" orientation="VERTICAL"/>
+            <vehicle id="SS" coordinate="I10" length="3" orientation="VERTICAL"/>
+            <vehicle id="DD" coordinate="I6" length="2" orientation="VERTICAL"/>
+            <vehicle id="EE" coordinate="I3" length="2" orientation="VERTICAL"/>
+            <vehicle id="FF" coordinate="J10" length="3" orientation="VERTICAL"/>
+            <vehicle id="HH" coordinate="J6" length="2" orientation="VERTICAL"/>
+            <vehicle id="JJ" coordinate="J3" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles><obstacle coordinate="C6"/><obstacle coordinate="D6"/><obstacle coordinate="E6"/><obstacle coordinate="F6"/><obstacle coordinate="I7"/><obstacle coordinate="I4"/><obstacle coordinate="I1"/><obstacle coordinate="J7"/><obstacle coordinate="J4"/><obstacle coordinate="J1"/></obstacles>
+    </level>
+    <level id="17" name="Forgalmi labirintus" difficulty="HARD" boardSize="10" exitSide="RIGHT">
+        <exit coordinate="K3"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="C3" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="E3" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="F3" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="G3" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="H3" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="E1" length="2" orientation="HORIZONTAL"/>
+            <vehicle id="CC" coordinate="A10" length="3" orientation="VERTICAL"/>
+            <vehicle id="WW" coordinate="A6" length="2" orientation="VERTICAL"/>
+            <vehicle id="KK" coordinate="A3" length="2" orientation="VERTICAL"/>
+            <vehicle id="MM" coordinate="B10" length="3" orientation="VERTICAL"/>
+            <vehicle id="TT" coordinate="B6" length="2" orientation="VERTICAL"/>
+            <vehicle id="NN" coordinate="B3" length="2" orientation="VERTICAL"/>
+            <vehicle id="SS" coordinate="I6" length="3" orientation="VERTICAL"/>
+            <vehicle id="DD" coordinate="I10" length="2" orientation="VERTICAL"/>
+            <vehicle id="EE" coordinate="I2" length="2" orientation="VERTICAL"/>
+            <vehicle id="FF" coordinate="J10" length="3" orientation="VERTICAL"/>
+            <vehicle id="HH" coordinate="J6" length="2" orientation="VERTICAL"/>
+            <vehicle id="JJ" coordinate="J2" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles><obstacle coordinate="E5"/><obstacle coordinate="F5"/><obstacle coordinate="G5"/><obstacle coordinate="H5"/><obstacle coordinate="A7"/><obstacle coordinate="A4"/><obstacle coordinate="A1"/><obstacle coordinate="B7"/><obstacle coordinate="B4"/><obstacle coordinate="B1"/></obstacles>
+    </level>
+    <level id="18" name="Végső torlódás" difficulty="HARD" boardSize="10" exitSide="LEFT">
+        <exit coordinate="A8"/>
+        <vehicles>
+            <vehicle id="RR" coordinate="G8" length="2" orientation="HORIZONTAL" target="true"/>
+            <vehicle id="BB" coordinate="C8" length="2" orientation="VERTICAL"/>
+            <vehicle id="GG" coordinate="D8" length="2" orientation="VERTICAL"/>
+            <vehicle id="YY" coordinate="E8" length="2" orientation="VERTICAL"/>
+            <vehicle id="OO" coordinate="F8" length="2" orientation="VERTICAL"/>
+            <vehicle id="PP" coordinate="C6" length="2" orientation="HORIZONTAL"/>
+            <vehicle id="CC" coordinate="A6" length="3" orientation="VERTICAL"/>
+            <vehicle id="WW" coordinate="A10" length="2" orientation="VERTICAL"/>
+            <vehicle id="KK" coordinate="A2" length="2" orientation="VERTICAL"/>
+            <vehicle id="MM" coordinate="B6" length="3" orientation="VERTICAL"/>
+            <vehicle id="TT" coordinate="B10" length="2" orientation="VERTICAL"/>
+            <vehicle id="NN" coordinate="B2" length="2" orientation="VERTICAL"/>
+            <vehicle id="SS" coordinate="I10" length="3" orientation="VERTICAL"/>
+            <vehicle id="DD" coordinate="I6" length="2" orientation="VERTICAL"/>
+            <vehicle id="EE" coordinate="I3" length="2" orientation="VERTICAL"/>
+            <vehicle id="FF" coordinate="J10" length="3" orientation="VERTICAL"/>
+            <vehicle id="HH" coordinate="J6" length="2" orientation="VERTICAL"/>
+            <vehicle id="JJ" coordinate="J3" length="2" orientation="VERTICAL"/>
+        </vehicles>
+        <obstacles><obstacle coordinate="C10"/><obstacle coordinate="D10"/><obstacle coordinate="E10"/><obstacle coordinate="F10"/><obstacle coordinate="I7"/><obstacle coordinate="I4"/><obstacle coordinate="I1"/><obstacle coordinate="J7"/><obstacle coordinate="J4"/><obstacle coordinate="J1"/></obstacles>
+    </level>
+</levels>
