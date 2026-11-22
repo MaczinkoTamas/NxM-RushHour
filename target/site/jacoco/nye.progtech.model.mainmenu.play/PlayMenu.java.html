@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="hu"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PlayMenu.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">NxM-RushHour</a> &gt; <a href="index.source.html" class="el_package">nye.progtech.model.mainmenu.play</a> &gt; <span class="el_source">PlayMenu.java</span></div><h1>PlayMenu.java</h1><pre class="source lang-java linenums">package nye.progtech.model.mainmenu.play;
+
+import nye.progtech.model.mainmenu.settings.Difficulty;
+import nye.progtech.model.map.Level;
+import nye.progtech.model.map.LevelLoader;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
+//Főmenü (pályák, nehézség szerint)
+public record PlayMenu(
+        List&lt;Level&gt; levels,
+        Difficulty selectedDifficulty,
+        int selectedIndex
+) {
+    //Kiválasztott nehézség (
+<span class="fc" id="L17">    public PlayMenu {</span>
+<span class="fc" id="L18">        levels = List.copyOf(levels);</span>
+<span class="fc" id="L19">        Objects.requireNonNull(selectedDifficulty, &quot;selectedDifficulty&quot;);</span>
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        if (levelsFor(levels, selectedDifficulty).isEmpty()) {</span>
+<span class="nc" id="L21">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L22">                    &quot;The play menu must contain levels for &quot; + selectedDifficulty.displayName());</span>
+        }
+<span class="pc bpc" id="L24" title="2 of 4 branches missed.">        if (selectedIndex &lt; 0 || selectedIndex &gt;= levelsFor(levels, selectedDifficulty).size()) {</span>
+<span class="nc" id="L25">            throw new IllegalArgumentException(</span>
+                    &quot;Selected level index is outside the selected difficulty&quot;);
+        }
+<span class="fc" id="L28">    }</span>
+//Főmenü betöltése
+    public static PlayMenu load() throws IOException {
+<span class="fc" id="L31">        return load(Difficulty.EASY);</span>
+    }
+//Főmenü betöltése
+    public static PlayMenu load(Difficulty difficulty) throws IOException {
+<span class="fc" id="L35">        return new PlayMenu(LevelLoader.loadLevels(), difficulty, 0);</span>
+    }
+//Nehézségek listája
+    public List&lt;Difficulty&gt; difficulties() {
+<span class="fc" id="L39">        return List.of(Difficulty.values());</span>
+    }
+//Nehézség neveinek a listája
+    public List&lt;String&gt; difficultyNames() {
+<span class="fc" id="L43">        return difficulties().stream().map(Difficulty::displayName).toList();</span>
+    }
+//Nehézség szintek listája
+    public List&lt;Level&gt; difficultyLevels() {
+<span class="fc" id="L47">        return levelsFor(levels, selectedDifficulty);</span>
+    }
+//Pályanevek listája
+    public List&lt;String&gt; levelNames() {
+<span class="fc" id="L51">        return difficultyLevels().stream().map(Level::name).toList();</span>
+    }
+//Kiválasztott pálya
+    public Level selectedLevel() {
+<span class="fc" id="L55">        return difficultyLevels().get(selectedIndex);</span>
+    }
+//Kiválasztott pályanév
+    public String selectedLevelName() {
+<span class="fc" id="L59">        return selectedLevel().name();</span>
+    }
+//Következő  nehézség
+    public PlayMenu nextDifficulty() {
+<span class="fc" id="L63">        int nextIndex = (selectedDifficulty.ordinal() + 1) % difficulties().size();</span>
+<span class="fc" id="L64">        return selectDifficulty(difficulties().get(nextIndex));</span>
+    }
+//Előző nehézség
+    public PlayMenu previousDifficulty() {
+<span class="fc" id="L68">        int previousIndex = (selectedDifficulty.ordinal() + difficulties().size() - 1)</span>
+<span class="fc" id="L69">                % difficulties().size();</span>
+<span class="fc" id="L70">        return selectDifficulty(difficulties().get(previousIndex));</span>
+    }
+//Nehézség kiválasztása
+    public PlayMenu selectDifficulty(Difficulty difficulty) {
+<span class="fc" id="L74">        return new PlayMenu(levels, difficulty, 0);</span>
+    }
+//Következő pálya
+    public PlayMenu nextLevel() {
+<span class="fc" id="L78">        return new PlayMenu(levels, selectedDifficulty,</span>
+<span class="fc" id="L79">                (selectedIndex + 1) % difficultyLevels().size());</span>
+    }
+//Előző pálya
+    public PlayMenu previousLevel() {
+<span class="fc" id="L83">        return new PlayMenu(levels, selectedDifficulty,</span>
+<span class="fc" id="L84">                (selectedIndex + difficultyLevels().size() - 1) % difficultyLevels().size());</span>
+    }
+//Pálya kiválasztása
+    public PlayMenu selectLevel(int levelId) {
+<span class="fc" id="L88">        List&lt;Level&gt; difficultyLevels = difficultyLevels();</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        for (int index = 0; index &lt; difficultyLevels.size(); index++) {</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">            if (difficultyLevels.get(index).id() == levelId) {</span>
+<span class="fc" id="L91">                return new PlayMenu(levels, selectedDifficulty, index);</span>
+            }
+        }
+<span class="fc" id="L94">        throw new IllegalArgumentException(&quot;Level &quot; + levelId + &quot; is not available for &quot;</span>
+<span class="fc" id="L95">                + selectedDifficulty.displayName() + &quot; difficulty&quot;);</span>
+    }
+//Pályák szűrése nehézség alapján
+    private static List&lt;Level&gt; levelsFor(List&lt;Level&gt; levels, Difficulty difficulty) {
+<span class="fc" id="L99">        return levels.stream()</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">                .filter(level -&gt; level.difficulty() == difficulty)</span>
+<span class="fc" id="L101">                .toList();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
