@@ -9,4 +9,4 @@ v1.1 (2026. 11. 10.) More complex logic
 
 v1.2 (2026. 11. 22.) Clean code, Hygiene
 
-[Under maintenance]
+
