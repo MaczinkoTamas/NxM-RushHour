@@ -28,9 +28,9 @@ final class BoardRenderer {
         output.println("Céljárművek: emberi " + level.targetFor(TargetOwner.HUMAN).marker()
                 + ", AI " + level.targetFor(TargetOwner.AI).marker());
         printColumnLabels(level, output);
-        String border = "+---".repeat(level.columnCount()) + "+";
+        String border = "        +" + "---+".repeat(level.columnCount());
         output.println("         U (fel)");
-        output.println("  " + border);
+        output.println(border);
         for (int row = 0; row < level.rowCount(); row++) {
             int rank = level.rowCount() - row;
             boolean leftExit = isExitOnRow(humanGoal, ExitSide.LEFT, row, level.rowCount())
@@ -63,7 +63,7 @@ final class BoardRenderer {
                         row, level.rowCount()));
             }
             output.println();
-            output.println("  " + border);
+            output.println(border);
         }
         output.println("         D (le)");
         printColumnLabels(level, output);
@@ -71,9 +71,9 @@ final class BoardRenderer {
     }
 
     private static void printColumnLabels(Level level, PrintStream output) {
-        output.print("     ");
+        output.print("          ");
         for (int column = 0; column < level.columnCount(); column++) {
-            output.printf(" %c ", 'A' + column);
+            output.printf("%c   ", 'A' + column);
         }
         output.println();
     }
